@@ -7,9 +7,9 @@ import NoteListMain from '../NoteListMain/NoteListMain'
 import NotePageMain from '../NotePageMain/NotePageMain'
 import AddFolder from '../AddFolder/AddFolder'
 import AddNote from '../AddNote/AddNote'
-import dummyStore from '../dummy-store'
-import { getNotesForFolder, findNote, findFolder } from '../notes-helpers'
+import { getNotesForFolder, findNote, findFolder, countNotesForFolder } from '../notes-helpers'
 import './App.css'
+import API from './API';
 
 import NoteContext from '../NoteContext';
 
@@ -25,11 +25,53 @@ class App extends Component {
 
   static context = NoteContext;
 
-  componentDidMount() {
-    // fake date loading from API call
-    setTimeout(() => this.setState(dummyStore), 600)
+
+
+  formatQueryParams(params) {
+    const queryItems = Object.keys(params)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`);
+    return queryItems.join('&');
   }
 
+  componentDidMount() {
+      API.apiGet()
+      .then(res => {
+        if(!res.ok) {
+          throw new Error('Something went wrong, please try again later.');
+        }
+        return res;
+      })
+      .then(res => res.json())
+      .then(data => { 
+        console.log(data)
+        this.setState({
+          notes:data.notes,
+          folders: data.folders,
+          error: null
+        });
+      })
+      .catch(err => {
+        this.setState({
+          error: err.message
+        });
+      });
+  }
+  
+  
+  
+  noteDelete = (noteId) => {
+      
+          API.apiDelete(noteId);
+
+          const newNotes = this.state.notes.filter(note => noteId !== note.id);
+          this.setState({
+            notes:newNotes,
+          })
+          
+  
+      }
+  
+  
   renderNavRoutes() {
     const { notes, folders } = this.state
     return (
@@ -126,11 +168,7 @@ class App extends Component {
       </>
     )
   }
-noteDelete = (noteId) => {
-      const newNotes = this.state.notes.filter( note => noteId !== note.id)
-        console.log('notedelete goes here')
-        this.setState({notes: newNotes});
-    }
+
 render() {
 
     const contextValue = {
