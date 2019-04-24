@@ -124,21 +124,19 @@ class App extends Component {
       </>
     )
   }
- noteDelete = (noteId) => {
+noteDelete = (noteId) => {
       const newNotes = this.state.notes.filter( note => noteId !== note.id)
         console.log('notedelete goes here')
         this.setState({notes: newNotes});
     }
-  render() {
-
-    
+render() {
 
     const contextValue = {
       deleteNote : this.noteDelete,
     }
 
     return (
-     <NoteContext.Provider 
+      <NoteContext.Provider 
         value={contextValue}>
         <div className='App'>
           <nav className='App__nav'>
@@ -155,7 +153,7 @@ class App extends Component {
             {this.renderMainRoutes()}
           </main>
         </div>
-     </NoteContext.Provider>
+      </NoteContext.Provider>
     )
   }
 }
