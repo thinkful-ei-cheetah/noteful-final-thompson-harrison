@@ -57,7 +57,17 @@ class App extends Component {
       });
   }
   
-  
+  addFolder = (folderName,folderId)=>{
+    let newList = this.state.folders;
+    const newFolder = {
+      name:folderName,
+      id:folderId
+    }
+    newList.push(newFolder);
+    this.setState({
+      folders:newList,
+    })
+  }
   
   noteDelete = (noteId) => {
       
