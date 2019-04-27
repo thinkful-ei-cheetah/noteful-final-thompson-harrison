@@ -23,8 +23,8 @@ class App extends Component {
   
   };
 
-  static context = NoteContext;
-
+  static contextType = NoteContext;
+  
 
 
   formatQueryParams(params) {
@@ -43,7 +43,6 @@ class App extends Component {
       })
       .then(res => res.json())
       .then(data => { 
-        console.log(data)
         this.setState({
           notes:data.notes,
           folders: data.folders,
@@ -68,7 +67,20 @@ class App extends Component {
       folders:newList,
     })
   }
-  
+  addNote = (name, content, folderId, id,time)=>{
+    let newList = this.state.notes;
+    const newNote = {
+      name:name,
+      content:content,
+      modified:time,
+      id:id,
+      folderId:folderId
+    }
+    newList.push(newNote);
+    this.setState({
+      notes:newList
+    })
+  }
   noteDelete = (noteId) => {
       
           API.apiDelete(noteId);
@@ -127,7 +139,10 @@ class App extends Component {
   }
 
   renderMainRoutes() {
-    const { notes, folders } = this.state
+    const { notes, folders } = this.state;
+    const contextValue={
+      addNotes:this.addNote
+    };
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
@@ -171,6 +186,7 @@ class App extends Component {
               <AddNote
                 {...routeProps}
                 folders={folders}
+                note={contextValue}
               />
             )
           }}
@@ -183,8 +199,9 @@ render() {
 
     const contextValue = {
       deleteNote : this.noteDelete,
+      addFolder:this.addFolder,
+      addNotes:this.addNote
     }
-
     return (
       <NoteContext.Provider 
         value={contextValue}>

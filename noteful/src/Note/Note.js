@@ -20,7 +20,11 @@ export default class Note extends Component {
 
     <NoteContext.Consumer >
       {(context)=> ( 
-      <button className='Note__delete' type='button' onClick={() => {context.deleteNote(this.props.id); if(this.props.onDelete){this.props.onDelete();};}} >
+      <button className='Note__delete' type='button' 
+      onClick={() => {
+        context.deleteNote(this.props.id); 
+        if(this.props.onDelete){this.props.onDelete();};
+        }} >
           <FontAwesomeIcon icon='trash-alt' />
           {' '}
           remove

@@ -21,13 +21,14 @@ export default class API extends React.Component{
 
     return fetch(url, options)
     }
-    static apiAddNote(name, content, folderId){
-      let time = new Date().toISOString();
+    static apiAddNote(name, content, folderId, id,time){
+      
       const bodytext = JSON.stringify({
         name:name,
         content:content,
         folderId:folderId,
-        modified:time
+        modified:time,
+        id:id
       })
       const baseUrl = 'http://localhost:9090/notes/';
       const options = {
@@ -40,15 +41,17 @@ export default class API extends React.Component{
       return fetch(baseUrl,options);
     }
 
-    static apiAddFolder(folderName){
+    static apiAddFolder(folderName,folderId){
       const bodytext = JSON.stringify({
-        name:folderName
+        name:folderName,
+        id:folderId
       })
+      console.log(bodytext);
       const baseUrl = 'http://localhost:9090/folders';
       const options = {
         method : "POST",
         headers:{
-          "Content-Type":"application.json"
+          "Content-Type":"application/json"
         },
         body: bodytext
       }
