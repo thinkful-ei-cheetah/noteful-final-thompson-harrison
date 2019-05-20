@@ -22,7 +22,7 @@ export default class API extends React.Component{
     return fetch(url, options)
     }
     static apiAddNote(name, content, folderId, id,time){
-      
+
       const bodytext = JSON.stringify({
         name:name,
         content:content,
